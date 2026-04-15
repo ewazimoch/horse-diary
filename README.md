@@ -1,177 +1,150 @@
-# 10x Astro Starter
+# Horse Diary
 
-![](./public/template.png)
+A mobile-first Progressive Web App for digitalising equestrian logistics and horse health history. Horse Diary replaces paper notebooks with a fast, offline-capable journal that horse owners can fill in straight from the stable.
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+## Table of Contents
+
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+---
+
+## Project Description
+
+Horse Diary is an MVP application built around two core modules:
+
+- **Day Module** — a short, structured daily log capturing the horse's mood (emoji rating), activities (icon-based multi-select), and an optional free-text note.
+- **Health Module** — a medical event tracker for farrier visits, vet appointments, vaccinations, and deworming, each with a date and optional note.
+
+Both modules feed a unified **Timeline** — a static weekly view (Monday–Sunday) that surfaces health events at the top of each day, above daily logs, with visual distinction between past and upcoming events. A horse profile switcher in the top navigation bar allows one user account to manage multiple horses.
+
+The app works offline as a PWA: entries are saved to IndexedDB when there is no network connection and automatically synced to Supabase once connectivity is restored, with a Toast notification confirming the background sync.
+
+---
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
-- [Supabase](https://supabase.com/) - Authentication and backend-as-a-service
+| Layer | Technology |
+|---|---|
+| Application framework | [Astro 5](https://astro.build/) (SSR, `output: "server"`) |
+| UI library | [React 19](https://react.dev/) (Islands architecture) |
+| Language | [TypeScript 5](https://www.typescriptlang.org/) |
+| Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
+| Component library | [shadcn/ui](https://ui.shadcn.com/) — New York style variant |
+| Backend / Auth / DB | [Supabase](https://supabase.com/) (PostgreSQL + Row Level Security) |
+| AI gateway | [OpenRouter.ai](https://openrouter.ai/) |
+| CI / CD | [GitHub Actions](https://github.com/features/actions) |
+| Hosting | [DigitalOcean](https://www.digitalocean.com/) |
+| Runtime | Node.js 22.14.0 |
 
-## Prerequisites
+---
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+## Getting Started Locally
 
-## Getting Started
+### Prerequisites
 
-1. Clone the repository:
+- **Node.js** `22.14.0` (see `.nvmrc` — use `nvm use` to switch automatically)
+- **npm**
+- A **Supabase** project with its URL and anon key
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+### Steps
 
-2. Install dependencies:
+1. **Clone the repository**
 
-```bash
-npm install
-```
+   ```bash
+   git clone https://github.com/<your-org>/horse-diary.git
+   cd horse-diary
+   ```
 
-3. Set up Supabase and configure environment variables — see [Supabase Configuration](#supabase-configuration) below.
+2. **Install dependencies**
 
-4. Run the development server:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-```
+3. **Configure environment variables**
 
-5. Build for production:
+   ```bash
+   cp .env.example .env
+   ```
 
-```bash
-npm run build
-```
+   Open `.env` and fill in the required values:
+
+   ```env
+   SUPABASE_URL=your_supabase_project_url
+   SUPABASE_KEY=your_supabase_anon_key
+   ```
+
+4. **(Optional) Start a local Supabase instance**
+
+   Requires [Docker](https://www.docker.com/).
+
+   ```bash
+   npx supabase start
+   ```
+
+5. **Start the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   The app is available at `http://localhost:3000`.
+
+---
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
-
-## Project Structure
-
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
-
-## Supabase Configuration
-
-This project uses [Supabase](https://supabase.com/) for authentication. Environment variables are declared via Astro's `astro:env` schema and are treated as **server-only secrets** — they are never exposed to the client.
-
-### First-time setup (local, no cloud project needed)
-
-Requires [Docker](https://www.docker.com/) and ~7 GB RAM.
-
-1. Create your `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-2. Initialize the local Supabase project (creates a `supabase/` config folder):
-
-```bash
-npx supabase init
-```
-
-3. Start the local stack (downloads Docker images on first run):
-
-```bash
-npx supabase start
-```
-
-4. Copy the credentials printed by the CLI into your `.env`:
-
-```
-SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_KEY=<anon key from CLI output>
-```
-
-5. To stop the stack when done:
-
-```bash
-npx supabase stop
-```
-
-The local Studio UI is available at `http://localhost:54323`.
-
-No database tables or migrations are required — this project uses Supabase Auth's built-in `auth.users` table only.
-
-### Using a cloud Supabase project instead
-
-If you prefer to use a hosted Supabase project, add these variables to your `.env` file:
-
-| Variable | Description |
+| Script | Description |
 |---|---|
-| `SUPABASE_URL` | Project URL from Supabase dashboard → Settings → API |
-| `SUPABASE_KEY` | `anon` public key from Supabase dashboard → Settings → API |
+| `npm run dev` | Start the development server on port 3000 |
+| `npm run build` | Create a production build (SSR via `@astrojs/node` standalone adapter) |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint across the project |
+| `npm run lint:fix` | Run ESLint and auto-fix fixable issues |
+| `npm run format` | Format all files with Prettier |
 
-```
-SUPABASE_URL=https://<project-ref>.supabase.co
-SUPABASE_KEY=<anon-key>
-```
+> **Pre-commit hooks** (Husky + lint-staged) run `eslint --fix` on `*.{ts,tsx,astro}` and `prettier --write` on `*.{json,css,md}` automatically before each commit.
 
-### Email confirmation in local development
+---
 
-By default Supabase requires email confirmation before a user can sign in. To skip this during local development:
+## Project Scope
 
-1. Open the Supabase dashboard for your project
-2. Go to **Authentication → Email → Confirm email**
-3. Toggle it **off**
+### In scope (MVP)
 
-Users can then sign in immediately after sign-up without clicking a confirmation link.
+- Secure email/password authentication via Supabase
+- One-time onboarding screen asking for the first horse's name
+- Multiple horse profiles per account with a top-nav profile switcher
+- **Day Module**: daily journal with emoji mood rating, activity icon multi-select, and optional text description
+- **Health Module**: medical event log (farrier, vet, vaccination, deworming) with date and optional note
+- **Timeline**: unified weekly view (Mon–Sun) combining both modules, health events pinned above daily logs
+- **Aggregate views**: filter the timeline to a single health event type for long-term history browsing
+- Edit and delete entries via a three-dot dropdown menu on each timeline card
+- PWA support with offline entry capture (IndexedDB) and automatic background sync to Supabase
 
-### Auth routes
+### Out of scope
 
-| Route | Description |
-|---|---|
-| `/auth/signin` | Email/password sign-in form |
-| `/auth/signup` | Email/password sign-up form |
-| `/auth/confirm-email` | Post-signup "check your inbox" page |
-| `/dashboard` | Example protected page (redirects to `/auth/signin` if unauthenticated) |
+- Push or email reminders and notifications
+- Detailed veterinary lab result tracking or blood parameter input
+- Multimedia or photo uploads
+- Granular daily metrics (temperature, pulse, diet, equipment)
+- Report generation, data export, or sharing
 
-Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
+---
 
-## AI Development Support
+## Project Status
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+**MVP — closed beta**
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+The application is under active development and is being validated with a small closed group (the author and friends, across 2+ horses). The primary success criterion is the adoption of Horse Diary as a full replacement for paper notebooks, measured by an average of at least **4 new entries per user per week** over **4 consecutive weeks** from the start of the production test phase.
 
-### Cursor IDE
-
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+---
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).
